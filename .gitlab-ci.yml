@@ -1,0 +1,9 @@
+# nom du job (arbitraire)
+test:
+  tags:
+    - myusine
+  # liste de lignes de commanes exéuctées par le runner
+  # dans un conteneur
+  script:
+    # commande echo
+    - echo "Test"
