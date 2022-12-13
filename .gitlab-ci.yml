@@ -1,9 +1,9 @@
-# image par défaut pour tous les jobs du pipeline
-# l'image est téléchargée depuis hub.docker.com
-# nomenclature: nom_image:nom_tag
-# l'image décrit la techno
-# le tag décrit la distrib socle et/ou la version
-image: node:lts-buster-slim
+# utilisation du registre d'image privé de gitlab
+# procédure: 
+## docker login gitlab.myusine.fr:5050 (root/roottoor)
+## docker tag node:lts-buster-slim gitlab.myusine.fr:5050/myusine/dev/node:lts-buster-slim
+## docker push gitlab.myusine.fr:5050/myusine/dev/node:lts-buster-slim
+image: gitlab.myusine.fr:5050/myusine/dev/node:lts-buster-slim
 
 test:
   tags: [myusine]
