@@ -1,13 +1,11 @@
-# utilisation du registre d'image privé de gitlab
-# procédure: 
-## docker login gitlab.myusine.fr:5050 (root/roottoor)
-## docker tag node:lts-buster-slim gitlab.myusine.fr:5050/myusine/dev/node:lts-buster-slim
-## docker push gitlab.myusine.fr:5050/myusine/dev/node:lts-buster-slim
-# utilisation d'une variable d'environnement prédifinie par gitlab
-## https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
 image: $CI_REGISTRY_IMAGE/node:lts-buster-slim
 
 test:
   tags: [myusine]
   script: 
     - node -v
+
+build:
+  tags: [myusine]
+  script: 
+    - npm list -g
