@@ -27,6 +27,6 @@ trigger_ops:
   stage: deploying
   trigger:
     project: myusine/ops
-    branch: master
+    branch: main
     
 
