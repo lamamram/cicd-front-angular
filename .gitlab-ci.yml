@@ -24,6 +24,7 @@ build:
 # appel à la CI/CD du projet myusine/ops
 # pipeline multi projet
 trigger_ops:
+  stage: deploying
   trigger:
     project: myusine/ops
     branch: master
