@@ -33,8 +33,8 @@ test:
     # une règle est vraie si toutes ses clauses sont vraies
     # ET logique
     - if: $CI_BRANCH_NAME =~ /1-.*/
-      changes:
-        - README.md
+      # changes:
+      #   - README.md
     - if: $CI_BRANCH_NAME == "master"
 
 build:
