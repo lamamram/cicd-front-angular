@@ -32,10 +32,10 @@ test:
   rules:
     # une règle est vraie si toutes ses clauses sont vraies
     # ET logique
-    - if: $CI_BRANCH_NAME =~ /.*/
+    - if: $CI_BRANCH_NAME =~ /^[0-9]+.*/
       changes:
         - README.md
-    - if: $CI_BRANCH_NAME == "master"
+    # - if: $CI_BRANCH_NAME == "master"
 
 build:
   stage: building
