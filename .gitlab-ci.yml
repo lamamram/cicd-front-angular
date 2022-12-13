@@ -26,6 +26,9 @@ test2:
 
 build:
   stage: building
+  # dépendance stricte au job test => build démarre dès après job,
+  # avant la fin du stage testing
+  needs: [test]
   tags: [myusine]
   script: 
     - npm list -g
