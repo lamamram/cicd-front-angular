@@ -1,12 +1,20 @@
 image: $CI_REGISTRY_IMAGE/node:lts-buster-slim
 
+# règles d'exécution du pipeline
+workflow:
+  # le pipeline s'exécute si au moins une règle est vraie
+  # OU logique
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    # - if: $CI_PIPELINE_SOURCE == "web"
+  
+
 stages:
   - testing
   - building
   - deploying
 
 test:
-  # un job appartient à un stage, cela fixe son ordre d'exécution
   stage: testing
   tags: [myusine]
   script: 
