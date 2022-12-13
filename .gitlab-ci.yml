@@ -16,6 +16,13 @@ test:
   script: 
     - node -v
 
+test2:
+  # un job appartient à un stage, cela fixe son ordre d'exécution
+  stage: testing
+  tags: [myusine]
+  script: 
+    - node -v
+
 build:
   stage: building
   tags: [myusine]
