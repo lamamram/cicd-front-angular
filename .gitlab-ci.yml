@@ -22,6 +22,7 @@ test2:
   tags: [myusine]
   script: 
     - node -v
+    - sleep 5
 
 build:
   stage: building
