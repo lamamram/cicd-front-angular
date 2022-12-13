@@ -14,19 +14,14 @@ test:
 
 build:
   stage: building
-  # dépendance stricte au job test => build démarre dès après job,
-  # avant la fin du stage testing
-  needs: [test]
   tags: [myusine]
   script: 
     - npm list -g
 
-# appel à la CI/CD du projet myusine/ops
-# pipeline multi projet
-trigger_ops:
+
+deploy:
   stage: deploying
-  trigger:
-    project: myusine/ops
-    branch: main
-    
+  tags: [myusine]
+  script: 
+    - echo "deploy !!"
 
