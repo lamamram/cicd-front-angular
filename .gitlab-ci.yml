@@ -1,13 +1,18 @@
 # nom du job (arbitraire)
-test:
-  tags:
-    - myusine
-  # liste de lignes de commanes exéuctées par le runner
-  # dans un conteneur
-  script:
-    # le chevron ">" permet d'écrire des commandes longues sur plusieurs lignes
-    # en transformant les saut de lignes en espace au moment de l'interprétation du yml 
-    - >
-      find / 
-      -type d 
-      -name "myusine" 
+# test:
+#   tags:
+#     - myusine
+#   # liste de lignes de commanes exéuctées par le runner
+#   # dans un conteneur
+#   script:
+#     # le chevron ">" permet d'écrire des commandes longues sur plusieurs lignes
+#     # en transformant les saut de lignes en espace au moment de l'interprétation du yml 
+#     - >
+#       find / 
+#       -type d 
+#       -name "myusine"
+
+test: {
+  "tags": ["myusine"], 
+  "script": ["echo 'Test'"]
+}
