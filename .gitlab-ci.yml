@@ -1,13 +1,9 @@
 image: $CI_REGISTRY_IMAGE/node:lts-buster-slim
 
-# par défaut les jobs s'exécutent en parallèle
-# nb d'accès concurrents pour le runner
-# sudo nano /etc/gitlab-runner/config.toml => concurrent = [nb_cpus]
-
-# liste des stages, i.e les étapes de l'exécution du pipeline
 stages:
   - testing
   - building
+  - deploying
 
 test:
   # un job appartient à un stage, cela fixe son ordre d'exécution
@@ -15,14 +11,6 @@ test:
   tags: [myusine]
   script: 
     - node -v
-
-test2:
-  # un job appartient à un stage, cela fixe son ordre d'exécution
-  stage: testing
-  tags: [myusine]
-  script: 
-    - node -v
-    - sleep 5
 
 build:
   stage: building
@@ -32,3 +20,12 @@ build:
   tags: [myusine]
   script: 
     - npm list -g
+
+# appel à la CI/CD du projet myusine/ops
+# pipeline multi projet
+trigger_ops:
+  trigger:
+    project: myusine/ops
+    branch: master
+    
+
