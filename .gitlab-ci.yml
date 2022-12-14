@@ -1,16 +1,41 @@
 image: $CI_REGISTRY_IMAGE/node:lts-buster-slim
 
+# règles d'exécution du pipeline
+workflow:
+  # le pipeline s'exécute si au moins une règle est vraie
+  # OU logique
+  rules:
+    # clause if : comparaison entre variables et valeurs string
+    # opérateurs gérés: 
+    ## == égal à 
+    # != différent de
+    # =~ matche la regex
+    # !~ ne matche pas la regex
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web"
+  
+
 stages:
   - testing
   - building
   - deploying
 
 test:
-  # un job appartient à un stage, cela fixe son ordre d'exécution
   stage: testing
   tags: [myusine]
+  # before_script:
+  #   - echo "commandes de préparation (install & config) du script principal" 
   script: 
     - node -v
+  # after_script:
+  #   - echo "commandes de nettoyage post script"
+  rules:
+    # une règle est vraie si toutes ses clauses sont vraies
+    # ET logique
+    - if: $CI_COMMIT_BRANCH =~ /[0-9]+(-[a-z]+)+/
+      changes:
+        - README.md
+    - if: $CI_COMMIT_BRANCH == "master"
 
 build:
   stage: building
@@ -24,4 +49,9 @@ deploy:
   tags: [myusine]
   script: 
     - echo "deploy !!"
+  rules:
+    # on déploit si l'objet poussé est un tag
+    - if: $CI_COMMIT_TAG
+    # et si on appuie sur un bouton
+      when: manual
 
