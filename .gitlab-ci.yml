@@ -6,32 +6,61 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "web"
   
 stages:
+  - installing deps
   - testing
   - building
   - deploying
 
-test:
-  # bonne solution: utilisation d'une image contenant déjà chrome
-  # image spécifique au job
-  image: $CI_REGISTRY_IMAGE/node-chrome:debian-node16
-  stage: testing
+variables:
+  TRIGGER_CACHE: "off"
+
+dependencies_cache:
+  stage: installing deps
   tags: [myusine]
-  # mauvaise solution: installer chrome à chaque exécution du job
-  # before_script:
-  #   - apt-get update && apt-get install -y google-chrome-stable 
   script:
     - cd cicd_angular
     - npm install
+    # - ls -al
+  # upload du dossier node_modules dans un cache gitlab (volume docker)
+  # policy push => upload uniquement
+  cache:
+    key: dependencies
+    paths:
+      - $CI_PROJECT_DIR/cicd_angular/node_modules
+    policy: push
+  rules:
+    - changes: 
+        - $CI_PROJECT_DIR/cicd_angular/package.json
+    - if: $TRIGGER_CACHE == "on" 
+
+test:
+  image: $CI_REGISTRY_IMAGE/node-chrome:debian-node16
+  stage: testing
+  tags: [myusine]
+  script:
+    - cd cicd_angular
     - npm run test:ci
   rules:
     - if: $CI_COMMIT_BRANCH =~ /[0-9]+(-[a-z]+)+/
     - if: $CI_COMMIT_BRANCH == "master"
+  # installation du dossier node_modules dans le conteneur avant l'exécution du script
+  ## utilisation de la clé du dossier node_modules (key: dependencies)
+  ## policy pull: installation uniquement
+  ## untracked true: ne pas virer les caches correspondant à des fichiers non versionnés
+  cache:
+    key: dependencies
+    policy: pull
+    untracked: true
 
-build:
+.build:
   stage: building
   tags: [myusine]
   script: 
-    - npm list -g
+    - cd $CI_PROJECT_DIR/cicd_angular/node_modules
+  cache:
+    key: dependencies
+    policy: pull
+    untracked: true
 
 
 deploy:
