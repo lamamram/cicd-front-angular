@@ -43,14 +43,19 @@ test:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /[0-9]+(-[a-z]+)+/
     - if: $CI_COMMIT_BRANCH == "master"
-  # installation du dossier node_modules dans le conteneur avant l'exécution du script
-  ## utilisation de la clé du dossier node_modules (key: dependencies)
-  ## policy pull: installation uniquement
-  ## untracked true: ne pas virer les caches correspondant à des fichiers non versionnés
   cache:
     key: dependencies
     policy: pull
     untracked: true
+  # prélèvement des artefacts produits par le job
+  artifacts:
+    expire_in: "1 hour"
+    # permet le téléchargement des artefacts
+    paths:
+      - $CI_PROJECT_DIR/cicd_angular/karma-results/**/karma-results.xml
+    # permet d'interpréter le rapport directement dans l'interface gitlab
+    reports:
+      junit: $CI_PROJECT_DIR/cicd_angular/karma-results/**/karma-results.xml
 
 .build:
   stage: building
