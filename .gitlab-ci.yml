@@ -1,40 +1,30 @@
 image: $CI_REGISTRY_IMAGE/node:lts-buster-slim
 
-# règles d'exécution du pipeline
 workflow:
-  # le pipeline s'exécute si au moins une règle est vraie
-  # OU logique
   rules:
-    # clause if : comparaison entre variables et valeurs string
-    # opérateurs gérés: 
-    ## == égal à 
-    # != différent de
-    # =~ matche la regex
-    # !~ ne matche pas la regex
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web"
   
-
 stages:
   - testing
   - building
   - deploying
 
 test:
+  # bonne solution: utilisation d'une image contenant déjà chrome
+  # image spécifique au job
+  image: $CI_REGISTRY_IMAGE/node-chrome:debian-node16
   stage: testing
   tags: [myusine]
+  # mauvaise solution: installer chrome à chaque exécution du job
   # before_script:
-  #   - echo "commandes de préparation (install & config) du script principal" 
-  script: 
-    - node -v
-  # after_script:
-  #   - echo "commandes de nettoyage post script"
+  #   - apt-get update && apt-get install -y google-chrome-stable 
+  script:
+    - cd cicd_angular
+    - npm install
+    - npm run test:ci
   rules:
-    # une règle est vraie si toutes ses clauses sont vraies
-    # ET logique
     - if: $CI_COMMIT_BRANCH =~ /[0-9]+(-[a-z]+)+/
-      changes:
-        - README.md
     - if: $CI_COMMIT_BRANCH == "master"
 
 build:
